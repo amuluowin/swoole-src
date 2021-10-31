@@ -22,6 +22,7 @@ using swoole::Lock;
 using swoole::Mutex;
 #ifdef HAVE_SPINLOCK
 using swoole::SpinLock;
+using swoole::AtomicSpinLock;
 #endif
 #ifdef HAVE_RWLOCK
 using swoole::RWLock;
@@ -138,6 +139,7 @@ void php_swoole_lock_minit(int module_number) {
 #endif
 #ifdef HAVE_SPINLOCK
     SW_REGISTER_LONG_CONSTANT("SWOOLE_SPINLOCK", Lock::SPIN_LOCK);
+    SW_REGISTER_LONG_CONSTANT("SWOOLE_ATOMIC_SPINLOCK", Lock::ATOMIC_SPIN_LOCK);
 #endif
 }
 
@@ -165,6 +167,9 @@ static PHP_METHOD(swoole_lock, __construct) {
 #ifdef HAVE_SPINLOCK
     case Lock::SPIN_LOCK:
         lock = new SpinLock(1);
+        break;
+    case Lock::ATOMIC_SPIN_LOCK:
+        lock = new AtomicSpinLock(1);
         break;
 #endif
 #ifdef HAVE_RWLOCK

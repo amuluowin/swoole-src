@@ -583,6 +583,7 @@ if test "$PHP_SWOOLE" != "no"; then
         src/lock/mutex.cc \
         src/lock/rw_lock.cc \
         src/lock/spin_lock.cc \
+        src/lock/atomic_spin_lock.cc \
         src/memory/buffer.cc \
         src/memory/fixed_pool.cc \
         src/memory/global_memory.cc \

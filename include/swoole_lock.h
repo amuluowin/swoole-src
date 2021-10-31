@@ -34,6 +34,7 @@ class Lock {
         SEM = 4,
         SPIN_LOCK = 5,
         ATOMIC_LOCK = 6,
+        ATOMIC_SPIN_LOCK = 7,
     };
     Type get_type() {
         return type_;
@@ -99,6 +100,23 @@ class SpinLock : public Lock {
   public:
     SpinLock(int use_in_process);
     ~SpinLock();
+    int lock_rd() override;
+    int lock() override;
+    int unlock() override;
+    int trylock_rd() override;
+    int trylock() override;
+};
+
+class AtomicSpinLock : public Lock {
+    sw_atomic_t *impl;
+    std::queue<Coroutine *> *queue_ = nullptr;
+    uint32_t pid = 0;
+
+    void init();
+
+  public:
+    AtomicSpinLock(int use_in_process);
+    ~AtomicSpinLock();
     int lock_rd() override;
     int lock() override;
     int unlock() override;
